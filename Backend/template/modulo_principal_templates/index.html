@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block contenido_principal %}
+	<div class="row justify-content-center">
+                            <div class="col-6 py-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        Porcentaje de plagio
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="progress">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 93%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">93%</div>
+                                        </div>            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                    
+                                <div class="card shadow">
+                                <div class="card-header">Buscar</div>
+                                <div class="card-body">
+                                    <form>
+                                        <div class="form-group"><label for="parrafo">Pega aqui el parrafo a examinar</label><textarea class="form-control" id="parrafo" rows="3"></textarea></div>
+                                        <div class="form-group">
+                                            <label for="archivo">Selecciona un archivo a examinar</label>
+
+                                            <input type="file" id="archivo" name="archivo" />
+                                        </div>
+                                           <div class="form-group">
+                                            <label for="biblioteca">Selecciona un archivo de la biblioteca</label>
+                                            
+                                            <select class="form-control" name="biblioteca" id="biblioteca">
+                                                <option selected disabled>Seleccione un archivo</option>
+                                            </select>
+                                        </div>
+                                    </form>
+
+
+                                </div>
+                                </div>                                
+                            </div>
+
+                            <div class="col-6">
+                                    
+                                <div class="card card-scrollable shadow">
+                                <div class="card-header">Resultados</div>
+                                <div class="card-body">
+                                    <a href="https://mobirise.com/bootstrap-template/web-application-template/">https://mobirise.com/bootstrap-template/web-application-template/</a>
+
+                                    <br>
+                                    <a href="https://mobirise.com/bootstrap-template/web-application-template/">https://mobirise.com/bootstrap-template/web-application-template/</a>
+
+                                    <br>
+
+                                    <a href="https://mobirise.com/bootstrap-template/web-application-template/">https://mobirise.com/bootstrap-template/web-application-template/</a>
+
+                                    <br>
+
+                                    <a href="https://mobirise.com/bootstrap-template/web-application-template/">https://mobirise.com/bootstrap-template/web-application-template/</a>    
+                                    
+                                    <br>
+                                    <a href="https://mobirise.com/bootstrap-template/web-application-template/">https://mobirise.com/bootstrap-template/web-application-template/</a>
+
+                                    <br>
+                                    <a href="https://mobirise.com/bootstrap-template/web-application-template/">https://mobirise.com/bootstrap-template/web-application-template/</a>
+
+                                    <br>
+                                    <a href="https://mobirise.com/bootstrap-template/web-application-template/">https://mobirise.com/bootstrap-template/web-application-template/</a>
+                                    <br>
+                                    <a href="https://mobirise.com/bootstrap-template/web-application-template/">https://mobirise.com/bootstrap-template/web-application-template/</a>
+                                    <br>
+                                    <a href="https://mobirise.com/bootstrap-template/web-application-template/">https://mobirise.com/bootstrap-template/web-application-template/</a>
+                                </div>
+                                </div>                                
+                            </div>
+                        </div>
+
+                         <div class="row justify-content-center py-3">
+                                    <div class="col-12">
+                                        <button data-toggle="tooltip" data-placement="top" title="" data-original-title="Busca en internet o en tu biblioteca personal referencias sobre este parrafo o documento." class="lift btn btn-success">Buscar referencias</button>
+
+                                        <button data-toggle="tooltip" data-placement="top" title="" data-original-title="Limpia el formulario de busqueda" class="btn btn-primary lift">Reestablecer</button>
+
+                                        <button data-toggle="tooltip" data-placement="top" title="" data-original-title="Enviar correo electronico al propietario del documento." class="btn btn-danger lift">Enviar correo electronico</button>
+                                    </div>
+                        </div>
+
+{% endblock contenido_principal %}

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Mis documentos</title>
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+        <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.24.1/feather.min.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="nav-fixed">
+            <nav class="topnav navbar navbar-expand shadow navbar-dark bg-dark" id="sidenavAccordion">
+            
+            <ul class="navbar-nav align-items-center ml-auto">
+                <li class="nav-item dropdown no-caret mr-3">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownDocs" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        >
+                        <div class="d-none d-md-inline font-weight-500 text-light">Opciones</div>
+                        <i class="fas fa-chevron-right dropdown-arrow"></i
+                    ></a>
+                    <div class="dropdown-menu dropdown-menu-right py-0 o-hidden mr-n15 mr-lg-0 animated--fade-in-up" aria-labelledby="navbarDropdownDocs">
+                        <a class="dropdown-item py-3" href="{% url 'index' %}" 
+                            ><div class="icon-stack bg-primary-soft text-primary mr-4"><i data-feather="zoom-in"></i></div>
+                            <div>
+                                <div class="small text-gray-500">Examinar documento</div>
+                                Examina un documento o parrafo.
+                            </div>
+                        </a>
+                        <a class="dropdown-item py-3" href="{% url 'listar_documentos' %}" 
+                            ><div class="icon-stack bg-primary-soft text-primary mr-4"><i data-feather="book"></i></div>
+                            <div>
+                                <div class="small text-gray-500">Biblioteca</div>
+                                Agregar o elimina archivos referencia de tu institucion.
+                            </div></a
+                        >
+                        <div class="dropdown-divider m-0"></div>
+                        <a class="dropdown-item py-3" href="https://docs.startbootstrap.com/sb-admin-pro/components" target="_blank"
+                            ><div class="icon-stack bg-primary-soft text-primary mr-4"><i data-feather="code"></i></div>
+                            <div>
+                                <div class="small text-gray-500">Correos Electronicos</div>
+                                Gestiona los correos electronicos archivados
+                            </div></a
+                        >
+                        
+                    </div>
+                </li>
+       
+                <li class="nav-item dropdown no-caret mr-3 dropdown-user">
+                    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" src="{{usuario.id_persona.foto.url}}"/></a>
+                    <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+                        <h6 class="dropdown-header d-flex align-items-center">
+                            <img class="dropdown-user-img" src="{{usuario.id_persona.foto.url}}" />
+                            <div class="dropdown-user-details">
+                                <div class="dropdown-user-details-name"> {{usuario.id_persona.nombres}}&nbsp;{{usuario.id_persona.apellidos}} </div>
+                                <div class="dropdown-user-details-email">{{usuario.correo}}</div>
+                            </div>
+                        </h6>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#!"
+                            ><div class="dropdown-item-icon"><i data-feather="settings"></i></div>
+                            Mi cuenta</a
+                        ><a class="dropdown-item" href="{% url 'cerrar_sesion' %}"
+                            ><div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
+                            Cerrar Sesión
+                            </a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        </nav>
+        
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="page-header pb-10 page-header-dark bg-dark">
+                        <div class="container-fluid">
+                            <div class="page-header-content">
+                                <h1 class="page-header-title">
+                                    <div class="page-header-icon"><i data-feather="filter"></i></div>
+                                    <span>Mis documentos</span>
+                                </h1>
+                                <div class="page-header-subtitle">Guarda y gestiona todos los archivos que usaras para el sistema anti-plagio.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid mt-n10">
+                        <div class="card mb-4">
+                            <div class="card-header d-flex">
+                            <label>Mis documentos</label>
+                            <a class="lift btn btn-success text-light">Agregar <i data-feather=""></i></a>
+                            </div>
+                            <div class="card-body">
+                                <div class="datatable table-responsive">
+                                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+
+                                                <th>Autor</th>
+                                                <th>Descripcion</th>
+                                                <th>Documento</th>
+                                                <th>Fecha subida</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for d in documentos  %}
+                                                <tr>
+                                                <td>{{d.autor}}</td>
+                                                <td>{{d.descripcion}}</td>
+                                                <td>{{d.documento}}</td>
+                                                <td>{{d.fecha_subida}}</td>
+                                                <td>
+                                                    <center>
+                                                    <button class="badge btn badge-secondary"><i data-feather="book-open"></i>&nbsp;<strong>Editar documento</strong>&nbsp;<i data-feather="book-open"></i></button>
+                                                    <button class="badge btn badge-danger"><i data-feather="book-open"></i>&nbsp;<strong>Elimidar documento</strong>&nbsp;<i data-feather="book-open"></i></button>
+                                                    </center>
+                                                </td>
+                                                
+                                            </tr>    
+                                            {% endfor %}
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </main>
+                
+            </div>
+    
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src=" {% static 'js/scripts.js' %}"></script>
+
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+        <script src="{% static 'js/datatables-demo.js' %}"></script>
+    </body>
+</html>
