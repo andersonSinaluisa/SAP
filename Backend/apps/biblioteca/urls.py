@@ -12,4 +12,5 @@ urlpatterns = [
     path('listar_documentos/',Listar_biblioteca.as_view(),name='listar_documentos'),
     path('crear_documento/',crear_documento,name='crear_documento'),
   	path('BibliotecaApi/',BibliotecaApi.as_view(),name='BibliotecaApi'),
+    path('CompararDocumentoApi/',CompararDocumentoApi.as_view(),name='CompararDocumentoApi'),
   ]

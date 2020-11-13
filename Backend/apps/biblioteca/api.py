@@ -1,6 +1,7 @@
 
 from rest_framework import viewsets
 from .models import *
+from apps.modulo_principal.models import *
 from .serializers import *
 import hashlib
 from django.db.models import Q
@@ -17,12 +18,18 @@ from email.mime.text import MIMEText
 from smtplib import *
 import random 
 
+class CompararDocumentoApi(APIView):
+	def post(self,request):
+		documento =  request.FILES['documentoOrigen']
+		documento_referencia = request.FILES.get('documento',None)
+		print(documento)
+		print(documento_referencia)
+		return Response(status=status.HTTP_200_OK)
 
 class BibliotecaApi(APIView):
 	def get(self,request):
-
 		if not request.query_params.get('id'):
-			lst_biblioteca = Biblioteca.objects.filter(id_usuario=request.query_params.get('id'))
+			lst_biblioteca = Biblioteca.objects.filter()
 		else:
 			lst_biblioteca = Biblioteca.objects.filter(id_usuario=request.query_params.get('id'))
 		serializer =  BibliotecaSerializer(lst_biblioteca,many=True)
@@ -30,11 +37,12 @@ class BibliotecaApi(APIView):
 	
 
 	def post(self,request):
+		usuario = Usuario.objects.get(id_usuario=request.data.get('id'))
 		nuevo_documento = Biblioteca.objects.create(
-													id_usuario=request.data.get('id'),
+													id_usuario=usuario,
 													autor=request.data.get('autor'),
 													descripcion=request.data.get('descripcion'),
-													documento=request.data.get('documento')
+													documento=request.FILES.get('documento')
 													)
 		serializer = BibliotecaSerializer(nuevo_documento,many=False)
 		return Response(serializer.data,status=status.HTTP_200_OK)
