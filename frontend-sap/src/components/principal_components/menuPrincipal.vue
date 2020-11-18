@@ -8,7 +8,7 @@
         <v-navigation-drawer color="red accent-4" v-model="drawer" absolute  temporary>
                 <v-list-item> 
                     <v-list-item-avatar>
-                    <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+                    <v-img :src="api_media+sessionUsuario.id_persona.foto"></v-img>
                     </v-list-item-avatar>
                     <v-list-item-content>
                     <v-list-item-title class="white--text">{{sessionUsuario.id_persona.nombres }} {{sessionUsuario.id_persona.apellidos}}</v-list-item-title>
@@ -58,6 +58,7 @@ export default {
     name: 'menuPrincipal',
     data: ()=>({
         sessionUsuario:null,
+        api_media: "http://localhost:8000",
         drawer: null,
         contenido: "biblioteca",
         drawer: null,

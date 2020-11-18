@@ -300,7 +300,16 @@ export default {
         },
 
         guardar_usuario(){
-            axios.post(this.api.USUARIO_API,this.formulario).then((respuesta) => {
+            var formData =  new FormData();
+            formData.append("nombres",this.formulario.nombres);
+            formData.append("apellidos",this.formulario.apellidos);
+            formData.append("correo",this.formulario.correo);
+            formData.append("identificacion",this.formulario.identificacion);
+            formData.append("usuario",this.formulario.usuario);
+            formData.append("clave",this.formulario.clave);
+            formData.append("foto",this.formulario.foto,this.formulario.foto.name);
+
+            axios.post(this.api.USUARIO_API,formData).then((respuesta) => {
                 if(respuesta.status == 200){
                     this.step--;
                     this.snackbar = true;

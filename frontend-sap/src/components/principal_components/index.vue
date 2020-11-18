@@ -20,7 +20,14 @@
               </v-tabs>
               <v-window v-model="step">
                 <v-window-item :value="1">
-                  <v-form id="examinarDocumento" class="py-3" @submit.prevent="mostrarBibliografia = true; mostrar=false;">
+                  <v-form
+                    id="examinarDocumento"
+                    class="py-3"
+                    @submit.prevent="
+                      mostrarBibliografia = true;
+                      mostrar = false;
+                    "
+                  >
                     <v-file-input
                       color="red accent-4"
                       placeholder="Selecciona una documento a examinar"
@@ -115,7 +122,10 @@
                 <v-window-item :value="2">
                   <v-form
                     id="formComparardocumentos"
-                    @submit.prevent="mostrar = true; mostrarBibliografia = false"
+                    @submit.prevent="
+                      mostrar = true;
+                      mostrarBibliografia = false;
+                    "
                   >
                     <v-file-input
                       v-model="formularioComparar.documentoOrigen"
@@ -126,18 +136,17 @@
                       label="Documento a examinar"
                     >
                     </v-file-input>
-
-                    <v-file-input
-                      v-model="formularioComparar.documento"
-                      color="red accent-4"
-                      id="documento"
-                      name="documento"
-                      placeholder="SELECCIONA UN DOCUMENTO REFERENCIA*"
-                      accept="application/txt"
-                      prepend-icon="mdi-file-search"
-                      label="Documento a examinar"
+                    <v-select 
+                    
+                    
+                    messages="Selecciona un documento de tu biblioteca"
+                    v-model="lista_Docs"
+                    name="selectedDocumento"
+                    label="Documento referencia"
+                    solo
                     >
-                    </v-file-input>
+                    </v-select>
+                    
                   </v-form>
                 </v-window-item>
               </v-window>
@@ -202,7 +211,9 @@
                   <div class="float-left py-5">
                     <h3 v-if="mostrar">
                       RESUTADOS DE:
-                      <strong class="red--text accent-4">{{resultados.nombre}}</strong>
+                      <strong class="red--text accent-4">{{
+                        resultados.nombre
+                      }}</strong>
                     </h3>
                     <h3 v-if="mostrar">
                       DOCUMENTO REFERENCIA:
@@ -220,20 +231,22 @@
                       </h1>
                     </center>
 
-
-
-
                     <h3 v-if="mostrarBibliografia">
                       RESUTADOS DE:
-                      <strong class="red--text accent-4">{{resultadosBibiografia.nombre}}</strong>
+                      <strong class="red--text accent-4">{{
+                        resultadosBibiografia.nombre
+                      }}</strong>
                     </h3>
 
                     <h3 v-if="mostrarBibliografia">
                       REFERENCIAS BIBLIOGRAFICAS:
                       <ul v-if="mostrarBibliografia">
-                          <li v-for="l in formularioPorReferencia.referencias" :key="l">
-                              <a :href="l">{{l}}</a>
-                          </li>
+                        <li
+                          v-for="l in formularioPorReferencia.referencias"
+                          :key="l"
+                        >
+                          <a :href="l">{{ l }}</a>
+                        </li>
                       </ul>
                     </h3>
                     <h3 v-if="mostrarBibliografia">PORCENTAJE DE PLAGIO:</h3>
@@ -245,7 +258,6 @@
                         </strong>
                       </h1>
                     </center>
-
                   </div>
                 </v-col>
               </v-row>
@@ -269,15 +281,17 @@ export default {
     mostrar: false,
     mostrarBibliografia: false,
     esValido: false,
-    listaDocs: [],
+   
     api: {
       BIBLIOTECA_API: "http://localhost:8000/BibliotecaApi/",
       COMPARAR_API: "http://localhost:8000/CompararDocumentoApi/",
     },
+    lista_Docs: [],
     formularioComparar: {
       documentoOrigen: null,
       documento: null,
     },
+
     resultados: {
       nombre: "documento.word",
       total: 35,
@@ -288,6 +302,7 @@ export default {
       total: 35,
       comparadoCon: "documento.word",
     },
+
     formularioPorReferencia: {
       archivo: null,
       ref: "",
@@ -313,7 +328,7 @@ export default {
       }
     },
 
-    listar_bibioteca() {
+    listar_biblioteca() {
       const usuario = JSON.parse(sessionStorage.getItem("usuario"));
       axios
         .get(this.api.BIBLIOTECA_API + "?id=" + usuario.id_usuario)
@@ -342,19 +357,10 @@ export default {
     },
     compararDocumentos() {
       console.log(this.formularioComparar);
-      /* 
-        var data = new FormData('#formComparardocumentos');
-        console.log(data);
-        axios.post(this.api.COMPARAR_API,this.formularioComparar,{'Content-Type': 'multipart/form-data'}).then((response) =>{
-          if (response.status == 200) {
-              console.log(response);
-          }
-        });
-        */
     },
   },
   created: function () {
-    this.listar_bibioteca();
+    this.listar_biblioteca();
   },
 };
 </script>
