@@ -76,7 +76,7 @@ class UsuarioApi(APIView):
 									 nombres=request.data.get('nombres'),
 									 apellidos=request.data.get('apellidos'),
 									 identificacion=request.data.get('identificacion'),
-									 #foto=request.FILES['foto']
+									 foto=request.data.get('foto')
 									 )
 		#Creo un registro en mi bases de datos de Usuario y lo guardo en la variable usuario
 		#las campos que son claves fonaneas como es el caso de id_persona, el requiere un objeto de esa tabla, asi que ahi guardo el objeto persona
@@ -97,6 +97,7 @@ class UsuarioApi(APIView):
 		usuario.id_persona.nombres = request.data.get('nombres')
 		usuario.id_persona.apellidos = request.data.get('apellidos')
 		usuario.id_persona.identificacion = request.data.get('identificacion')
+		usuario.id_persona.foto = request.data.get('foto')
 		usuario.id_persona.save()
 		serializer = UsuarioSerializer(usuario,many=False)
 		return Response(serializer.data,status=status.HTTP_200_OK)

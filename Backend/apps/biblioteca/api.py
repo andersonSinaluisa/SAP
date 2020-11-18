@@ -42,13 +42,13 @@ class BibliotecaApi(APIView):
 													id_usuario=usuario,
 													autor=request.data.get('autor'),
 													descripcion=request.data.get('descripcion'),
-													documento=request.FILES.get('documento')
+													documento=request.data.get('documento')
 													)
 		serializer = BibliotecaSerializer(nuevo_documento,many=False)
 		return Response(serializer.data,status=status.HTTP_200_OK)
 
 	def put(self,request):
-		biblioteca = Biblioteca.objects.get(id_biblioteca=request.data.get('id_bilioteca'))
+		biblioteca = Biblioteca.objects.get(id_biblioteca=request.data.get('id'))
 		biblioteca.autor = request.data.get('autor')
 		biblioteca.descripcion = request.data.get('descripcion')
 		biblioteca.documento = request.data.get('documento')
@@ -57,6 +57,7 @@ class BibliotecaApi(APIView):
 		return Response(serializer.data,status=status.HTTP_200_OK)
 
 	def delete(self,request):
-		biblioteca = Biblioteca.objects.get(id_biblioteca=request.data.get('id_bilioteca'))
+		print(request.query_params.get("id"))
+		biblioteca = Biblioteca.objects.get(id_biblioteca=request.query_params.get('id'))
 		biblioteca.delete()
-		return Reponse({'elemento_borrado':'Documento eliminado'},status=status.HTTP_200_OK)
+		return Response({'elemento_borrado':'Documento eliminado'},status=status.HTTP_200_OK)
