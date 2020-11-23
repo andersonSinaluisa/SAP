@@ -42,7 +42,7 @@
                     v-model="formBiblioteca.documento"
                     color="red accent-4"
                     placeholder="SELECCIONA UN DOCUMENTO*"
-                    accept="application/msword,application/pdf"
+                    accept="application/msword,application/pdf,.doc,.docx"
                     prepend-icon="mdi-file-plus"
                     label="Documento"
                   ></v-file-input>

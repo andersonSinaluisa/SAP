@@ -226,7 +226,7 @@ export default {
     },
     editar_doc() {
       var formdata = new FormData();
-      console.log(this.form_edit.documento)
+      //console.log(this.form_edit.documento)
       formdata.append("documento", this.form_edit.documento,this.form_edit.documento.name);
       formdata.append("id",this.form_edit.id);
       formdata.append("autor",this.form_edit.autor);
@@ -257,7 +257,7 @@ export default {
         .get(this.api.BIBLIOTECA_API + "?id=" + this.id)
         .then((respuesta) => {
           if (respuesta.status == 200) {
-            console.log(respuesta.data);
+            //console.log(respuesta.data);
             this.lista_documentos = respuesta.data;
           }
         })

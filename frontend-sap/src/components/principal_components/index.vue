@@ -122,31 +122,34 @@
                 <v-window-item :value="2">
                   <v-form
                     id="formComparardocumentos"
-                    @submit.prevent="
-                      mostrar = true;
-                      mostrarBibliografia = false;
-                    "
+                    @submit.prevent="compararDocumentos"
                   >
+                    
+
                     <v-file-input
+                      @change="hasNull(formularioComparar)"
                       v-model="formularioComparar.documentoOrigen"
                       color="red accent-4"
                       placeholder="SELECCIONA UN DOCUMENTO A EXAMINAR*"
-                      accept="application/txt"
+                      accept=".doc,.docx,application/pdf"
                       prepend-icon="mdi-file-plus"
                       label="Documento a examinar"
                     >
                     </v-file-input>
-                    <v-select 
-                    
-                    
-                    messages="Selecciona un documento de tu biblioteca"
-                    v-model="lista_Docs"
-                    name="selectedDocumento"
-                    label="Documento referencia"
-                    solo
+
+                    <v-select
+                      @change="hasNull(formularioComparar)"
+                      color="red accent-4"
+                      :items="lista_Docs"
+                      v-model="formularioComparar.id_biblioteca"
+                      item-text="documento"
+                      item-value="id_biblioteca"
+                      single-line
+                      auto
+                      prepend-icon="mdi-file-plus"
+                      label="Seleccionar documento"
                     >
                     </v-select>
-                    
                   </v-form>
                 </v-window-item>
               </v-window>
@@ -167,6 +170,7 @@
                   color="green accent-4"
                   class="white--text"
                   v-if="step == 2"
+                  :disabled="hasNull(formularioComparar)"
                 >
                   Comparar documentos
                 </v-btn>
@@ -195,70 +199,47 @@
       <v-row>
         <v-col cols="12">
           <v-card shaped>
-            <v-card-title class="red accent-4 white--text"
-              >Resultados</v-card-title
-            >
+            <v-card-title class="red accent-4 white--text">Resultados</v-card-title>
             <v-card-text>
               <v-row justify="center">
-                <v-col cols="4">
-                  <v-img
-                    class="float-right"
-                    src="../../statics/img/red-file--v1.png"
-                    width="150"
-                  />
-                </v-col>
-                <v-col cols="8">
-                  <div class="float-left py-5">
-                    <h3 v-if="mostrar">
-                      RESUTADOS DE:
-                      <strong class="red--text accent-4">{{
-                        resultados.nombre
-                      }}</strong>
-                    </h3>
-                    <h3 v-if="mostrar">
-                      DOCUMENTO REFERENCIA:
-                      <strong class="red--text accent-4">{{
-                        resultados.comparadoCon
-                      }}</strong>
-                    </h3>
-                    <h3 v-if="mostrar">PORCENTAJE DE PLAGIO:</h3>
-                    <br v-if="mostrar" />
-                    <center>
-                      <h1 v-if="mostrar" class="center">
-                        <strong class="red--text accent4">
-                          {{ resultados.total }} %
-                        </strong>
-                      </h1>
-                    </center>
+                <v-col cols="12" sm="12" md="12">
+                  <center v-if="printResultadoEstados == 'inicio' ">
+                    <h3 class='accent-4 red--text'> Los resultados se visualizaran aqui.</h3>
+                  </center>
 
-                    <h3 v-if="mostrarBibliografia">
-                      RESUTADOS DE:
-                      <strong class="red--text accent-4">{{
-                        resultadosBibiografia.nombre
-                      }}</strong>
-                    </h3>
-
-                    <h3 v-if="mostrarBibliografia">
-                      REFERENCIAS BIBLIOGRAFICAS:
-                      <ul v-if="mostrarBibliografia">
-                        <li
-                          v-for="l in formularioPorReferencia.referencias"
-                          :key="l"
-                        >
-                          <a :href="l">{{ l }}</a>
-                        </li>
-                      </ul>
-                    </h3>
-                    <h3 v-if="mostrarBibliografia">PORCENTAJE DE PLAGIO:</h3>
-                    <br v-if="mostrarBibliografia" />
+                  <center v-if="printResultadoEstados == 'cargando'">
+                    
+                    <v-progress-circular width="7" size="100" color="red accent-4" indeterminate>
+                    </v-progress-circular>
+                    <br/>
+                    <br/>
+                    <h3 class="red--text accent-4">Examinando documentos...</h3>
                     <center>
-                      <h1 v-if="mostrarBibliografia" class="center">
-                        <strong class="red--text accent4">
-                          {{ resultadosBibiografia.total }} %
-                        </strong>
-                      </h1>
+                      <h3 class="accent-4 red--text">Resultados.</h3>
+                      <br/>
                     </center>
-                  </div>
+                  </center>
+
+                  <center v-if="printResultadoEstados == 'resultados'">
+                        <center>
+                        <h3 class='accent-4 red--text'> Resultados. </h3> <br>
+                                  <v-row justify="center">
+                          <v-col cols="2" sm="2" md="2">
+                              <v-img width="150" class="float-right" src="../../statics/img/red-file--v1.png"/>
+                          </v-col>
+                          <v-col cols="6" sm="6" md="6">
+                              <div class="py-5">
+                              <h3 class="float-left black--text accent-4">Documento: &nbsp; <label class="accent-4 red--text">{{formularioCompararResultados.documentoOrigen.name}}</label> </h3>
+                              <h3 class="float-left black--text accent-4">Documento referencia: &nbsp; <label class="accent-4 red--text"> {{formularioCompararResultados.documentoBiblioteca}} </label>   </h3><br>
+                              <h3 class="float-left black--text accent-4">Porcentaje de plagio:</h3> <br> <br>
+                              <center>
+                              <h1 class="red--text text-accent-4"> {{formularioCompararResultados.resultado}} </h1>
+                              </center>
+                              </div>
+                          </v-col>  
+                        </v-row>
+                      </center>
+                  </center>
                 </v-col>
               </v-row>
             </v-card-text>
@@ -278,30 +259,26 @@ export default {
   data: () => ({
     step: 1,
     dialog: false,
-    mostrar: false,
-    mostrarBibliografia: false,
     esValido: false,
-   
+
     api: {
       BIBLIOTECA_API: "http://localhost:8000/BibliotecaApi/",
       COMPARAR_API: "http://localhost:8000/CompararDocumentoApi/",
     },
     lista_Docs: [],
+    tipo_archivo: [".docx", ".pdf"],
+
     formularioComparar: {
+      id_biblioteca: null,
       documentoOrigen: null,
-      documento: null,
     },
 
-    resultados: {
-      nombre: "documento.word",
-      total: 35,
-      comparadoCon: "documento.word",
+    formularioCompararResultados: {
+      documentoOrigen: null,
+      documentoBiblioteca: "",
+      resultado: "",
     },
-    resultadosBibiografia: {
-      nombre: "documento.word",
-      total: 35,
-      comparadoCon: "documento.word",
-    },
+
 
     formularioPorReferencia: {
       archivo: null,
@@ -318,8 +295,17 @@ export default {
       ],
       textRules: [(v) => !!v || "Este campo es requerido"],
     },
+    printResultado:"<h3 class='accent-4 red--text'> Los resultados se visualizaran aqui.</h3>",
+    printResultadoEstados: "inicio",
   }),
   methods: {
+    hasNull(target) {
+      for (var member in target) {
+        if (target[member] == null) return true;
+      }
+      return false;
+    },
+
     validar_boton() {
       if (this.isUrl(this.formularioPorReferencia.ref)) {
         this.esValido = true;
@@ -334,8 +320,8 @@ export default {
         .get(this.api.BIBLIOTECA_API + "?id=" + usuario.id_usuario)
         .then((response) => {
           if (response.status == 200) {
-            this.listaDocs = response.data;
-            console.log(this.listaDocs);
+            this.lista_Docs = response.data;
+            //console.log(this.lista_Docs);
           }
         });
     },
@@ -351,12 +337,33 @@ export default {
         this.formularioPorReferencia.referencias.splice(ref);
       }
     },
+
     isUrl(s) {
       var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
       return regexp.test(s);
     },
+
     compararDocumentos() {
-      console.log(this.formularioComparar);
+      const formData = new FormData();
+      this.printResultadoEstados = 'cargando';
+      formData.append(
+        "documenToExaminar",
+        this.formularioComparar.documentoOrigen,
+        this.formularioComparar.documentoOrigen.name
+      );
+      formData.append("id_biblioteca", this.formularioComparar.id_biblioteca);
+      formData.append("tipo_doc", this.formularioComparar.tipo_doc);
+      axios
+        .post(this.api.COMPARAR_API, formData)
+        .then((response) => {
+          this.formularioCompararResultados.resultado = response.data.resultado;
+          this.formularioCompararResultados.documentoBiblioteca = response.data.documentoBiblioteca;
+          this.formularioCompararResultados.documentoOrigen = this.formularioComparar.documentoOrigen; 
+          this.printResultadoEstados = "resultados";
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     },
   },
   created: function () {

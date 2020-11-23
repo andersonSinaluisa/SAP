@@ -1,30 +1,76 @@
 
-from rest_framework import viewsets
 from .models import *
 from apps.modulo_principal.models import *
 from .serializers import *
-import hashlib
-from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 import json
 import urllib.request
-from django.core.mail import EmailMessage
+#from django.core.mail import EmailMessage
 from django.conf import settings
-from django.template.loader import render_to_string
-from django.template.loader import get_template 
-from email.mime.text import MIMEText
-from smtplib import *
-import random 
+#from django.template.loader import render_to_string
+#from django.template.loader import get_template 
+#from email.mime.text import MIMEText
+#from smtplib import *
+#import random
+import os
+
+import docx2txt
+import jellyfish
+import PyPDF2
+
+"""
+def validate_file_extension(value):
+    ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
+    valid_extensions = ['.pdf', '.doc', '.docx', '.jpg', '.png', '.xlsx', '.xls']
+    if not ext.lower() in valid_extensions:
+        raise ValidationError('Unsupported file extension.')
+"""
 
 class CompararDocumentoApi(APIView):
 	def post(self,request):
-		documento =  request.FILES['documentoOrigen']
-		documento_referencia = request.FILES.get('documento',None)
-		print(documento)
-		print(documento_referencia)
-		return Response(status=status.HTTP_200_OK)
+
+		documento_origen =  request.data.get('documenToExaminar')
+		id_documento = request.data.get('id_biblioteca')
+		documento = Biblioteca.objects.get(id_biblioteca=id_documento)
+		ext = os.path.splitext(documento.documento.name)[1]
+		if ext.lower() in ['.pdf']:
+			textBiblioteca = ""
+			textDocumentoOrigen = ""
+			documento_bilioteca = open(documento.documento.path,'rb')
+			#========== Convierte a texto el pdf de biblioteca ==========
+			documentoLectorBiblioteca = PyPDF2.PdfFileReader(documento_bilioteca)
+			numero_paginas_biblioteca_doc = documentoLectorBiblioteca.numPages
+
+			for numero_de_pagina in range(numero_paginas_biblioteca_doc):
+				#OBTENGO LA PAGINA POR NUMERO DE PAGINA 
+				pageobj = documentoLectorBiblioteca.getPage(numero_de_pagina)
+				#EXTRIGO EL TEXTO DE ESA PAGINA
+				textBiblioteca += pageobj.extractText()
+			
+			
+			#=========== CONVIERTE EN TEXT EL PDF A EXAMINAR ==========
+			documentoLectorExaminar = PyPDF2.PdfFileReader(documento_bilioteca)
+			numero_paginas_doc_examinar = documentoLectorExaminar.numPages
+			for numero_de_paginas in range(numero_paginas_doc_examinar):
+				pageobj = documentoLectorExaminar.getPage(numero_de_paginas)
+				textDocumentoOrigen += pageobj.extractText()
+			#print(textBiblioteca)
+			#===========================================================
+			
+			result = round(jellyfish.jaro_distance(textDocumentoOrigen,textBiblioteca)*100,2)
+			result_str = str(result) + "%"
+			serialize = {'resultado':result_str,'documentoBiblioteca':documento.documento.name}
+			return Response(serialize,status=status.HTTP_200_OK)
+
+		if ext.lower() in ['.docx']:
+			textoDocumentoOrigen = docx2txt.process(documento_origen)
+			textoDocumentoBiblioteca = docx2txt.process(documento.documento)
+			result = round(jellyfish.s(textoDocumentoOrigen,textoDocumentoBiblioteca)*100,2)
+			result_str = str(result) + "%"
+			serialize = {'resultado':result_str,'documentoBiblioteca':documento.documento.name} 
+			return Response(serialize,status=status.HTTP_200_OK)
 
 class BibliotecaApi(APIView):
 	def get(self,request):

@@ -5,9 +5,7 @@ import Login from '../components/seguridad-components/Login.vue'
 import menuPrincipal from '../components/principal_components/menuPrincipal.vue'
 import index from '../components/principal_components/index.vue'
 import biblioteca from '../components/biblioteca_components/biblioteca.vue';
-import bibliotecaNuevo from '../components/biblioteca_components/bibliotecaNuevo.vue';
-import bibliotecaEditar from '../components/biblioteca_components/bibliotecaEditar.vue';
-import bibliotecaEliminar from '../components/biblioteca_components/bibliotecaEliminar.vue';
+
 
 Vue.use(VueRouter)
 
@@ -34,25 +32,6 @@ const routes = [
     component: biblioteca
   },
 
-
-  {
-    path: '/bibliotecaNuevo',
-    name: 'bibliotecaNuevo',
-    component: bibliotecaNuevo
-  },
-
-
-  {
-    path: '/bibliotecaEditar',
-    name: 'bibliotecaEditar',
-    component: bibliotecaEditar
-  },
-
-  {
-    path: '/bibliotecaEliminar',
-    name: 'bibliotecaEliminar',
-    component: bibliotecaEliminar
-  },
 
 
 
