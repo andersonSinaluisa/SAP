@@ -234,9 +234,28 @@
                               <h3 class="float-left black--text accent-4">Porcentaje de plagio:</h3> <br> <br>
                               <center>
                               <h1 class="red--text text-accent-4"> {{formularioCompararResultados.resultado}} </h1>
+                              
+                              
                               </center>
                               </div>
+                             
+                              
+                           
                           </v-col>  
+                        </v-row>
+                        <v-row class="p-5">
+                          <v-col cols="12" sm="8" md="6" xl="6">
+                              <div class="card border border-3">
+                                <label class="accent-4 red--text"> {{formularioCompararResultados.documentoBiblioteca}} </label> <br>
+                                  {{formularioCompararResultados.text}}
+                              </div>
+                          </v-col>
+                          <v-col cols="12" sm="8" md="6" xl="6">
+                            <div class="card border border-3">
+                               <label class="accent-4 red--text">{{formularioCompararResultados.documentoOrigen.name}}</label> <br>
+                                {{formularioCompararResultados.text1}}
+                              </div>
+                          </v-col>
                         </v-row>
                       </center>
                   </center>
@@ -277,6 +296,8 @@ export default {
       documentoOrigen: null,
       documentoBiblioteca: "",
       resultado: "",
+      text:'',
+      text1 :''
     },
 
 
@@ -359,6 +380,8 @@ export default {
           this.formularioCompararResultados.resultado = response.data.resultado;
           this.formularioCompararResultados.documentoBiblioteca = response.data.documentoBiblioteca;
           this.formularioCompararResultados.documentoOrigen = this.formularioComparar.documentoOrigen; 
+          this.formularioCompararResultados.text = response.data.corpus_text;
+          this.formularioCompararResultados.text1 = response.data.corpus_text1;
           this.printResultadoEstados = "resultados";
         })
         .catch((err) => {
