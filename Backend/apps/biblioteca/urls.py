@@ -13,4 +13,5 @@ urlpatterns = [
     path('crear_documento/',crear_documento,name='crear_documento'),
   	path('BibliotecaApi/',BibliotecaApi.as_view(),name='BibliotecaApi'),
     path('CompararDocumentoApi/',CompararDocumentoApi.as_view(),name='CompararDocumentoApi'),
+    path('ComparaRef/',DocumentoRef.as_view(),name='ComparaRef')
   ]

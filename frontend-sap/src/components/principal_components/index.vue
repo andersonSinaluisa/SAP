@@ -23,19 +23,18 @@
                   <v-form
                     id="examinarDocumento"
                     class="py-3"
-                    @submit.prevent="
-                      mostrarBibliografia = true;
-                      mostrar = false;
-                    "
+                    @submit.prevent="compararReferencias"
                   >
                     <v-file-input
                       color="red accent-4"
                       placeholder="Selecciona una documento a examinar"
                       id="documento"
-                      accept="application/msword,application/pdf"
+                      @change="hasNull(formularioPorReferencia)"
+                      accept=".doc,.docx,application/pdf"
                       prepend-icon="mdi-file"
                       label="Documento a examinar"
                       show-size
+                      v-model="formularioPorReferencia.archivo"
                     >
                     </v-file-input>
 
@@ -124,8 +123,6 @@
                     id="formComparardocumentos"
                     @submit.prevent="compararDocumentos"
                   >
-                    
-
                     <v-file-input
                       @change="hasNull(formularioComparar)"
                       v-model="formularioComparar.documentoOrigen"
@@ -162,6 +159,7 @@
                   color="green accent-4"
                   class="white--text"
                   v-if="step == 1"
+                  :disabled="hasNull(formularioPorReferencia)"
                   >Examinar documento</v-btn
                 >
                 <v-btn
@@ -199,65 +197,158 @@
       <v-row>
         <v-col cols="12">
           <v-card shaped>
-            <v-card-title class="red accent-4 white--text">Resultados</v-card-title>
+            <v-card-title class="red accent-4 white--text"
+              >Resultados</v-card-title
+            >
             <v-card-text>
               <v-row justify="center">
                 <v-col cols="12" sm="12" md="12">
-                  <center v-if="printResultadoEstados == 'inicio' ">
-                    <h3 class='accent-4 red--text'> Los resultados se visualizaran aqui.</h3>
+                  <center v-if="printResultadoEstados == 'inicio'">
+                    <h3 class="accent-4 red--text">
+                      Los resultados se visualizaran aqui.
+                    </h3>
                   </center>
 
                   <center v-if="printResultadoEstados == 'cargando'">
-                    
-                    <v-progress-circular width="7" size="100" color="red accent-4" indeterminate>
+                    <v-progress-circular
+                      width="7"
+                      size="100"
+                      color="red accent-4"
+                      indeterminate
+                    >
                     </v-progress-circular>
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
                     <h3 class="red--text accent-4">Examinando documentos...</h3>
                     <center>
                       <h3 class="accent-4 red--text">Resultados.</h3>
-                      <br/>
+                      <br />
                     </center>
                   </center>
 
                   <center v-if="printResultadoEstados == 'resultados'">
-                        <center>
-                        <h3 class='accent-4 red--text'> Resultados. </h3> <br>
-                                  <v-row justify="center">
-                          <v-col cols="2" sm="2" md="2">
-                              <v-img width="150" class="float-right" src="../../statics/img/red-file--v1.png"/>
-                          </v-col>
-                          <v-col cols="6" sm="6" md="6">
-                              <div class="py-5">
-                              <h3 class="float-left black--text accent-4">Documento: &nbsp; <label class="accent-4 red--text">{{formularioCompararResultados.documentoOrigen.name}}</label> </h3>
-                              <h3 class="float-left black--text accent-4">Documento referencia: &nbsp; <label class="accent-4 red--text"> {{formularioCompararResultados.documentoBiblioteca}} </label>   </h3><br>
-                              <h3 class="float-left black--text accent-4">Porcentaje de plagio:</h3> <br> <br>
-                              <center>
-                              <h1 class="red--text text-accent-4"> {{formularioCompararResultados.resultado}} </h1>
-                              
-                              
-                              </center>
-                              </div>
-                             
-                              
-                           
-                          </v-col>  
-                        </v-row>
-                        <v-row class="p-5">
-                          <v-col cols="12" sm="8" md="6" xl="6">
-                              <div class="card border border-3">
-                                <label class="accent-4 red--text"> {{formularioCompararResultados.documentoBiblioteca}} </label> <br>
-                                  {{formularioCompararResultados.text}}
-                              </div>
-                          </v-col>
-                          <v-col cols="12" sm="8" md="6" xl="6">
-                            <div class="card border border-3">
-                               <label class="accent-4 red--text">{{formularioCompararResultados.documentoOrigen.name}}</label> <br>
-                                {{formularioCompararResultados.text1}}
-                              </div>
-                          </v-col>
-                        </v-row>
-                      </center>
+                    <center>
+                      <h3 class="accent-4 red--text">Resultados.</h3>
+                      <br />
+                      <v-row justify="center">
+                        <v-col cols="2" sm="2" md="2">
+                          <v-img
+                            width="150"
+                            class="float-right"
+                            src="../../statics/img/red-file--v1.png"
+                          />
+                        </v-col>
+                        <v-col cols="6" sm="6" md="6">
+                          <div class="py-5">
+                            <h3 class="float-left black--text accent-4">
+                              Documento: &nbsp;
+                              <label class="accent-4 red--text">{{
+                                formularioCompararResultados.documentoOrigen
+                                  .name
+                              }}</label>
+                            </h3>
+                            <h3 class="float-left black--text accent-4">
+                              Documento referencia: &nbsp;
+                              <label class="accent-4 red--text">
+                                {{
+                                  formularioCompararResultados.documentoBiblioteca
+                                }}
+                              </label>
+                            </h3>
+                            <br />
+                            <h3 class="float-left black--text accent-4">
+                              Porcentaje de plagio:
+                            </h3>
+                            <br />
+                            <br />
+                            <center>
+                              <h1 class="red--text text-accent-4">
+                                {{ formularioCompararResultados.resultado }}
+                              </h1>
+                            </center>
+                          </div>
+                        </v-col>
+                      </v-row>
+                      <v-row class="p-5">
+                        <v-col cols="12" sm="8" md="6" xl="6">
+                          <div class="card border border-3">
+                            <label class="accent-4 red--text">
+                              {{
+                                formularioCompararResultados.documentoBiblioteca
+                              }}
+                            </label>
+                            <br />
+                            {{ formularioCompararResultados.text }}
+                          </div>
+                        </v-col>
+                        <v-col cols="12" sm="8" md="6" xl="6">
+                          <div class="card border border-3">
+                            <label class="accent-4 red--text">{{
+                              formularioCompararResultados.documentoOrigen.name
+                            }}</label>
+                            <br />
+                            {{ formularioCompararResultados.text1 }}
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </center>
+                  </center>
+
+                  <center v-if="printResultadoEstados == 'resultadosRef'">
+                    <center>
+                      <h3 class="accent-4 red--text">Resultados.</h3>
+                      <br />
+                      <v-row justify="center">
+                        <v-col cols="2" sm="2" md="2">
+                          <v-img
+                            width="150"
+                            class="float-right"
+                            src="../../statics/img/red-file--v1.png"
+                          />
+                        </v-col>
+                        <v-col cols="6" sm="6" md="6">
+                          <div class="py-5">
+                            <h3 class="float-left black--text accent-4">
+                              Porcentaje de plagio:
+                            </h3>
+                            <br />
+                            <br />
+                            <center>
+                              <h1 class="red--text text-accent-4">
+                                {{ resultadoComparacionRef.resultado }}
+                              </h1>
+                            </center>
+                          </div>
+                        </v-col>
+                      </v-row>
+                      <v-row
+                        class="p-5"
+                        v-for="li in resultadoComparacionRef.lista"
+                        :key="li"
+                      >
+                       <v-col cols="12" sm="12" md="12" xl="12">
+                         
+                          <a :href="li[0]">
+                          <span class="blue--text"> Enlace de Referencia: {{ li[0] }}</span>
+                          </a>
+                        </v-col>
+                        
+
+                        <v-col cols="6" sm="6" md="6" xl="6">
+                          <h3 class="float-left black--text accent-4">
+                            Texto de Referencia:
+                          </h3><br>
+                          {{ li[1] }}
+                        </v-col>
+                        <v-col cols="6" sm="6" md="6" xl="6">
+                          <h3 class="float-left black--text accent-4">
+                            Texto del Documento:
+                          </h3><br>
+
+                          {{ li[2] }}
+                        </v-col>
+                      </v-row>
+                    </center>
                   </center>
                 </v-col>
               </v-row>
@@ -283,6 +374,7 @@ export default {
     api: {
       BIBLIOTECA_API: "http://localhost:8000/BibliotecaApi/",
       COMPARAR_API: "http://localhost:8000/CompararDocumentoApi/",
+      COMPARAR_REF: "http://localhost:8000/ComparaRef/",
     },
     lista_Docs: [],
     tipo_archivo: [".docx", ".pdf"],
@@ -296,10 +388,14 @@ export default {
       documentoOrigen: null,
       documentoBiblioteca: "",
       resultado: "",
-      text:'',
-      text1 :''
+      text: "",
+      text1: "",
     },
 
+    resultadoComparacionRef: {
+      lista: [],
+      resultado: [],
+    },
 
     formularioPorReferencia: {
       archivo: null,
@@ -316,7 +412,8 @@ export default {
       ],
       textRules: [(v) => !!v || "Este campo es requerido"],
     },
-    printResultado:"<h3 class='accent-4 red--text'> Los resultados se visualizaran aqui.</h3>",
+    printResultado:
+      "<h3 class='accent-4 red--text'> Los resultados se visualizaran aqui.</h3>",
     printResultadoEstados: "inicio",
   }),
   methods: {
@@ -366,7 +463,7 @@ export default {
 
     compararDocumentos() {
       const formData = new FormData();
-      this.printResultadoEstados = 'cargando';
+      this.printResultadoEstados = "cargando";
       formData.append(
         "documenToExaminar",
         this.formularioComparar.documentoOrigen,
@@ -378,11 +475,41 @@ export default {
         .post(this.api.COMPARAR_API, formData)
         .then((response) => {
           this.formularioCompararResultados.resultado = response.data.resultado;
-          this.formularioCompararResultados.documentoBiblioteca = response.data.documentoBiblioteca;
-          this.formularioCompararResultados.documentoOrigen = this.formularioComparar.documentoOrigen; 
+          this.formularioCompararResultados.documentoBiblioteca =
+            response.data.documentoBiblioteca;
+          this.formularioCompararResultados.documentoOrigen = this.formularioComparar.documentoOrigen;
           this.formularioCompararResultados.text = response.data.corpus_text;
           this.formularioCompararResultados.text1 = response.data.corpus_text1;
           this.printResultadoEstados = "resultados";
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+
+    compararReferencias() {
+      console.log(this.formularioPorReferencia.referencias);
+      const formData = new FormData();
+      this.printResultadoEstados = "cargando";
+      formData.append("referencia", this.formularioPorReferencia.referencias);
+      formData.append(
+        "doc",
+        this.formularioPorReferencia.archivo,
+        this.formularioPorReferencia.archivo.name
+      );
+      axios
+        .post(this.api.COMPARAR_REF, formData)
+        .then((res) => {
+          console.log(res);
+          let element = [];
+          let final = [];
+          for (let index = 0; index < res.data.corpus_text.length; index++) {
+            element.push(res.data.corpus_text[index]);
+          }
+          this.resultadoComparacionRef.resultado = res.data.resultado;
+
+          this.resultadoComparacionRef.lista = element;
+          this.printResultadoEstados = "resultadosRef";
         })
         .catch((err) => {
           console.error(err);
