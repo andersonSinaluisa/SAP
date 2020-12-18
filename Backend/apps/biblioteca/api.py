@@ -102,7 +102,7 @@ class CompararDocumentoApi(APIView):
 
 		#===========================================================#
 		#============ELIMINA EL DOCUMENTO SUBIDO===============#
-		self.deleteFile(str(documento_origen.name))
+		#self.deleteFile(str(documento_origen.name))
 		#===================OBTIENE EL NUMERO DE LINEAS SEPARADAS POR PUNTOS====#
 		textBiblioteca = TextBlob(textBiblioteca)
 		textDocumentoOrigen = TextBlob(textDocumentoOrigen)
@@ -306,5 +306,5 @@ class DocumentoRef(APIView):
 		print(result_str)
 		serialize = {'resultado': result_str,
                     'corpus_text': listaSalida, 'corpus_text1': textRef}
-		self.deleteFile(str(documento_origen.name))
+		#self.deleteFile(str(documento_origen.name))
 		return Response(serialize, status=status.HTTP_200_OK)
