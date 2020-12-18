@@ -110,26 +110,34 @@ class CompararDocumentoApi(APIView):
 		#==================CREA UN CONTADOR Y UN STRING PARA EL TEXTO DE SALIDA =========================#
 		salida = ''
 		salida2 = ''
-		count = 0
-		n_words_origen = 0
+		count1 = 0
+		count=0
 
-		n_words_biblioteca = 0
-		for a in textDocumentoOrigen.sentences:
-			for i in textBiblioteca.sentences:
-				a = str(a)
-				i = str(i)
-				for x, palabra in enumerate(a):
-					for y, palabra2 in enumerate(i):
-						n_words_biblioteca = n_words_biblioteca + 1
-						if x == y:
-							if palabra == palabra2:
-								count = count+1
-								salida += palabra
-								salida2 += palabra2
-					n_words_origen = n_words_origen+1
+		for sentenceOrigen in textDocumentoOrigen.sentences:
+			#========RECORRE EL TEXTO DEL HTML =========#
+			for sentences in textBiblioteca.sentences:
+				palabrasOrigen = TextBlob(str(sentenceOrigen))
+				palabrasSentences = TextBlob(str(sentences))
+				for x, wordOrigen in enumerate(palabrasOrigen.words):
+					
+					for y, word in enumerate(palabrasSentences.words):
+						count = count + 1
+						if wordOrigen == word :
+							count1 = count1 + 1
+							salida += wordOrigen+" "
+							salida2 += word+" "
 
-		result = round(jellyfish.jaro_distance(
-		    str(textDocumentoOrigen), str(textBiblioteca))*100, 2)
+
+
+		if count1==0 or count==0:
+			result=0
+		else:
+			result = (count/count1)*100
+
+			if result>100:
+				result=100
+			
+		
 
 		salida = str(salida)
 		salida2 = str(salida2)
@@ -284,12 +292,15 @@ class DocumentoRef(APIView):
 				continue
 		#============ELIMINA EL DOCUMENTO SUBIDO===============#
 
-		result = (count1/count)*0.10
-		if result>100:
-			result=100
 		
-		if count1==0:
+		
+		if count1==0 or count==0:
 			result=0
+		else:
+			result = (count1/count)*0.10
+			if result>100:
+				result=100
+
 
 		result_str = str(result)+"%"
 		print(result_str)
