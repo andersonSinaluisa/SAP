@@ -11,6 +11,7 @@ import LibraryPage from './pages/library/LibraryPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 import LibraryCreatePage from './pages/library/LibraryCreatePage';
 import CheckLibraryPage from './pages/checkLibrary/CheckLibraryPage';
+import RegisterPage from './pages/RegisterPage';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -36,6 +37,7 @@ export default function Router() {
         { path: '404', element: <Page404 /> },
         { path: '*', element: <Navigate to="/404" /> },
         { path: 'login', element: <LoginPage /> },
+        {path:'registro',element:<RegisterPage/>}
       ],
     },
     {

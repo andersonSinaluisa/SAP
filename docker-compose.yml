@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sap_db
+      
+
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./backend_sap
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: sap_db
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DEBUG : False
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    environment:
+      REACT_APP_API_URL: backend:8000
+
+
+volumes:
+  postgres-data:

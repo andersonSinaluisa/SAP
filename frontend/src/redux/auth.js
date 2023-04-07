@@ -150,6 +150,7 @@ export const authReducer = (state = init, action) => {
  */
 export const login = (data) => async (dispatch) => {
   try {
+    console.log(BASE_API + LOGIN_PATH);
     const res = await axios.post(BASE_API + LOGIN_PATH, data);
 
     dispatch({
@@ -157,6 +158,7 @@ export const login = (data) => async (dispatch) => {
       payload: { token: res.data, user: data.username, isLogin: true },
     });
   } catch (error) {
+    console.log(error);
     if (error.response) {
       if (error.response.status === 400) {
         dispatch({
@@ -208,11 +210,7 @@ export const getUsers = (token) => async (dispatch) => {
  */
 export const createUser = (data, token) => async (dispatch) => {
   try {
-    const res = await axios.post(BASE_API + USER_CREATE, data, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
+    const res = await axios.post(BASE_API + USER_CREATE, data);
     dispatch({
       type: CREATE_USER,
       payload: { status: res.status, message: "Usuario creado con exito" },

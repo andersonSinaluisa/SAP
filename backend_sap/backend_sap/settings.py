@@ -11,13 +11,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import environ
+from dotenv import load_dotenv
 
-# Define el objeto env
-env = environ.Env()
-
-# Lee las variables de entorno desde un archivo .env
-environ.Env.read_env()
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '-u)cakyrw2%uh(1xzj$2_g=1b0mn0=yo=2s+ijzz5%q%83cn^)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', True)
 
 ALLOWED_HOSTS = ['*']
 
@@ -93,7 +90,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend_sap.wsgi.application'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITE_LIST = (
-        'http://localhost:3000',
+        'http://localhost:3001',
     )
 
 # Database
@@ -102,11 +99,11 @@ CORS_ORIGIN_WHITE_LIST = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env('MYSQL_DATABASE'),
-        'USER': env('MYSQL_USER'),
-        'PASSWORD': env('MYSQL_PASSWORD'),
-        'HOST': env('MYSQL_HOST'),
-        'PORT': env('MYSQL_PORT'),
+        'NAME': os.environ.get('DB_DATABASE',"sap_db"),
+        'USER': os.environ.get('DB_USERNAME',"postgres"),
+        'PASSWORD': os.environ.get('DB_PASSWORD',"root"),
+        'HOST': os.environ.get('DB_HOST',"localhost"),
+        'PORT': os.environ.get('DB_PORT',"5432"),
     }
 }
 

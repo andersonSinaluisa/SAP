@@ -88,7 +88,7 @@ class getAllUser(APIView):
 
 
 class createUser(APIView):
-    permission_classes = [IsAuthenticated, UserPermission]
+    permission_classes = []
     model = User
     permission_required = 'core.add_user'
 

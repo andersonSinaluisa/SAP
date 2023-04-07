@@ -13,6 +13,7 @@ import Logo from '../components/logo';
 import Iconify from '../components/iconify';
 // sections
 import { LoginForm } from '../sections/auth/login';
+import RegisterForm from 'src/sections/auth/register/RegisterForm';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +44,7 @@ const StyledContent = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const mdUp = useResponsive('up', 'md');
 
   return (
@@ -65,26 +66,25 @@ export default function LoginPage() {
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
             </Typography>
-            <img src="/assets/illustrations/illustration_login.jpg" alt="login" />
+            <img src="/assets/illustrations/illustration_register.jpg" alt="login" />
           </StyledSection>
         )}
 
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" gutterBottom>
-              Sign in to Minimal
+                Crear cuenta
             </Typography>
 
             <Typography variant="body2" sx={{ mb: 5 }}>
-              Don’t have an account? {''}
-              <Link variant="subtitle2">Get started</Link>
+              ¿ya tienes cuenta? {''}
+              <Link variant="subtitle2">Iniciar sesión</Link>
             </Typography>
 
-            
+            <RegisterForm/>
 
          
 
-            <LoginForm />
           </StyledContent>
         </Container>
       </StyledRoot>
