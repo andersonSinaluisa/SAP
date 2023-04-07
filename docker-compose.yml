@@ -26,7 +26,6 @@ services:
       DB_DATABASE: sap_db
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
-      DEBUG : false
 
   frontend:
     build:
