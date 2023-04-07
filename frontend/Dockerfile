@@ -1,7 +1,9 @@
 # Base image
 FROM node:alpine as build
 
-RUN export NODE_OPTIONS="--max-old-space-size=5120"
+#incrementar la memoria de node
+ENV NODE_OPTIONS=--max_old_space_size=4096
+
 
 # Set working directory
 WORKDIR /app
@@ -14,6 +16,7 @@ RUN npm install
 
 # Copy app files
 COPY . .
+
 
 # Build app
 RUN npm run build
