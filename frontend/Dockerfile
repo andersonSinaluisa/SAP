@@ -1,6 +1,8 @@
 # Base image
 FROM node:alpine as build
 
+RUN export NODE_OPTIONS="--max-old-space-size=5120"
+
 # Set working directory
 WORKDIR /app
 
