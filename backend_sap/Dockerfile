@@ -24,7 +24,7 @@ COPY ./requirements.txt /app/
 COPY ./nginx.conf /etc/nginx/sites-enabled/def
 
 # Instalar dependencias
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt || true
 
 # Copiar el código fuente de la aplicación
 COPY . /app/
